@@ -1,9 +1,9 @@
 (* Exercise: 1 star (nandb) *)
 Definition nandb (b1 : bool) (b2 : bool) : bool :=
-    match b1 with
-        | false => true
-        | true => negb b2
-    end.
+	match b1 with
+		| false => true
+		| true => negb b2
+	end.
 
 Example test_nandb1: (nandb true false) = true.
 Proof. reflexivity. Qed.
@@ -16,13 +16,13 @@ Proof. reflexivity. Qed.
 
 (* Exercise: 1 star (andb3) *)
 Definition andb3 (b1 : bool) (b2 : bool) (b3 : bool) : bool :=
-    match b1 with
-        | true => match b2 with
-                      | true => b3
-                      | false => false
-                  end
-        | false => false
-    end.
+	match b1 with
+		| true => match b2 with
+								| true => b3
+								| false => false
+							end
+		| false => false
+	end.
 
 Example test_andb31: (andb3 true true true) = true.
 Proof. reflexivity. Qed.
