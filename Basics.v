@@ -96,3 +96,27 @@ Proof.
   rewrite <- H.
   reflexivity.
 Qed.
+
+(* Exercise: 1 star (zero_nbeq_plus_1) *)
+Fixpoint beq_nat (n m : nat) : bool :=
+  match n with
+  | 0 => match m with
+         | 0 => true
+         | S m' => false
+         end
+  | S n' => match m with
+            | 0 => false
+            | S m' => beq_nat n' m'
+            end
+  end.
+
+Theorem zero_nbeq_plus_1 :
+  forall n : nat,
+  beq_nat 0 (n + 1) = false.
+Proof.
+  intros n. destruct n as [| n'].
+  (* CASE n = 0 *)
+    simpl. reflexivity.
+  (* CASE n = S n' *)
+    simpl. reflexivity.
+Qed.
