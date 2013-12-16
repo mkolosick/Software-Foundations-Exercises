@@ -192,3 +192,12 @@ Proof. reflexivity. Qed.
 Example test_add1_bin5 : bin_to_nat (add1_bin (one_more_twice (twice (one_more_twice O)))) =
   S (bin_to_nat (one_more_twice (twice (one_more_twice O)))).
 Proof. reflexivity. Qed.
+
+(* Exercise: 2 stars, optional (decreasing) *)
+(*
+Fixpoint terminating_but_unacceptable (x : nat) : nat :=
+  match x with
+    | 0 => 0
+    | S x' => terminating_but_unacceptable ((x' * 2) - (x' * 3))
+  end.
+*)
