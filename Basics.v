@@ -70,3 +70,29 @@ Example test_blt_nat2: (blt_nat 2 4) = true.
 Proof. reflexivity. Qed.
 Example test_blt_nat3: (blt_nat 4 2) = false.
 Proof. reflexivity. Qed.
+
+(* Exercise: 1 star (plus_id_exercise) *)
+Theorem plus_id_exercise:
+  forall n m o : nat,
+  n = m -> m = o -> n + m = m + o.
+Proof.
+  intros n m o.
+  intros H1.
+  intros H2.
+  rewrite -> H1.
+  rewrite <- H2.
+  reflexivity.
+Qed.
+
+(* Exercise: 2 stars (mult_S_1) *)
+Theorem mult_S_1:
+  forall n m : nat,
+  m = S n ->
+  m * (1 + n) = m * m.
+Proof.
+  intros n m.
+  intros H.
+  simpl.
+  rewrite <- H.
+  reflexivity.
+Qed.
