@@ -120,3 +120,75 @@ Proof.
   (* CASE n = S n' *)
     simpl. reflexivity.
 Qed.
+
+(* Exercise: 2 stars (boolean functions) *)
+Theorem identity_fn_applied_twice :
+  forall (f : bool -> bool),
+  (forall (x : bool), f x = x) ->
+  forall (b : bool), f (f b) = b.
+Proof.
+  intros f.
+  intros H.
+  intros b.
+  rewrite -> H.
+  rewrite -> H.
+  reflexivity.
+Qed.
+
+(* Exercise: 2 stars (andb_eq_orb) *)
+Lemma andb_t_f : andb true false = false.
+Proof. reflexivity. Qed.
+
+Lemma andb_f_t : andb false true = false.
+Proof. reflexivity. Qed.
+
+Theorem andb_eq_orb :
+  forall (b c : bool),
+  (andb b c = orb b c) -> b = c.
+Proof.
+  intros b c H. destruct b.
+  (* CASE b = true *)
+    destruct c.
+    (* CASE c = true *)
+      reflexivity.
+    (* CASE c = false *)
+      rewrite <- andb_t_f.
+      rewrite H.
+      reflexivity.
+  (* CASE b = false *)
+    destruct c.
+    (* CASE c = true *)
+      rewrite <- andb_f_t.
+      rewrite H.
+      reflexivity.
+    (* CASE C = false *)
+      reflexivity.
+Qed.
+
+(* Exercise: 3 stars (binary) *)
+Inductive bin : Type := 
+  | O : bin
+  | twice : bin -> bin
+  | one_more_twice : bin -> bin.
+
+Fixpoint add1_bin (b : bin) : bin :=
+  match b with
+    | O => one_more_twice O
+    | twice b' => one_more_twice b'
+    | one_more_twice b' => twice (add1_bin b')
+  end.
+
+Fixpoint bin_to_nat (b : bin) : nat :=
+  match b with
+    | O => 0
+    | twice b' => 2 * (bin_to_nat b')
+    | one_more_twice b' => S (2 * (bin_to_nat b'))
+  end.
+
+Example test_add1_bin0 : bin_to_nat (add1_bin O) = S (bin_to_nat O).
+Proof. reflexivity. Qed.
+Example test_add1_bin1 : bin_to_nat (add1_bin (one_more_twice O)) = S (bin_to_nat (one_more_twice O)).
+Proof. reflexivity. Qed.
+Example test_add1_bin5 : bin_to_nat (add1_bin (one_more_twice (twice (one_more_twice O)))) =
+  S (bin_to_nat (one_more_twice (twice (one_more_twice O)))).
+Proof. reflexivity. Qed.
