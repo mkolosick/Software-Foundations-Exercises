@@ -112,7 +112,7 @@ Proof.
 Qed.
 
 (* Exercise: 2 stars (double_plus) *)
-Fixpoint double (n : nat) :=
+Fixpoint double (n : nat) : nat :=
   match n with
     | 0 => 0
     | S n' => S (S (double n'))
@@ -137,3 +137,109 @@ Qed.
 (*
 induction provides a hypothesis that it is true for the previous case
 *)
+
+(* Exercise: 4 stars (mult_comm) *)
+Theorem plus_swap :
+  forall n m p : nat,
+  n + (m + p) = m + (n + p).
+Proof.
+  intros n m p.
+  assert (H1: n + (m + p) = n + m + p).
+    rewrite -> plus_assoc.
+    reflexivity.
+  rewrite -> H1.
+  assert (H2: n + m = m + n).
+    rewrite -> plus_comm.
+    reflexivity.
+  rewrite -> H2.
+  rewrite -> plus_assoc.
+  reflexivity.
+Qed.
+
+Theorem mult_is_add :
+  forall n m: nat,
+  m + m * n = m * S n.
+Proof.
+  intros n m.
+  induction m as [| m'].
+  (* CASE: m = 0 *)
+    induction n as [| n'].
+    (* CASE: n = 0 *)
+      reflexivity.
+    (* CASE: n = S n' *)
+      reflexivity.
+  (* CASE: m = S m' *)
+    simpl.
+    rewrite <- IHm'.
+    rewrite -> plus_swap.
+    reflexivity.
+Qed.
+
+Theorem mult_comm :
+  forall n m: nat,
+  n * m = m * n.
+Proof.
+  intros n m.
+  induction n as [| n'].
+  (* CASE: n = 0 *)
+    rewrite -> mult_0_r.
+    reflexivity.
+  (* CASE: n = S n' *)
+    induction m as [| m'].
+    (* CASE: m = 0 *)
+      rewrite -> mult_0_r.
+      reflexivity.
+    (* CASE: m = S m' *)
+      simpl.
+      rewrite -> IHn'.
+      simpl.
+      rewrite -> plus_swap.
+      rewrite -> mult_is_add.
+      reflexivity.
+Qed.
+
+(* Exercise: 2 stars, optional (evenb_n__oddb_Sn) *)
+Fixpoint evenb (n : nat) : bool :=
+  match n with
+    | 0 => true
+    | S 0 => false
+    | S (S n') => evenb n'
+  end.
+
+Fixpoint oddb (n : nat) : bool :=
+  match n with
+    | 0 => false
+    | S 0 => true
+    | S (S n') => oddb n'
+  end.
+
+Lemma negb_negb_b :
+  forall b : bool,
+  negb (negb b) = b.
+Proof.
+  destruct b.
+  (* CASE: b = true *)
+    reflexivity.
+  (* CASE: b = false *)
+    reflexivity.
+Qed.
+
+Theorem evenb_n__oddb_Sn :
+  forall n : nat,
+  evenb n = negb (evenb (S n)).
+Proof.
+  intros n.
+  induction n as [| n'].
+  (* CASE: n = 0 *)
+    reflexivity.
+  (* CASE: n = S n' *)
+    simpl.
+    destruct n'.
+    (* CASE: n' = 0 *)
+      reflexivity.
+    (* CASE: n' = S n'' *)
+      rewrite -> IHn'.
+      simpl.
+      rewrite -> negb_negb_b.
+      reflexivity.
+Qed.
